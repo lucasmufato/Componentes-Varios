@@ -1,0 +1,41 @@
+
+<table [class]="classTable">
+  <thead [class]="classHeader">
+    <tr [class]="classHeaderRow">
+      <th *ngIf="settings.check || settings.radio">
+        {{settings.selectLabel}}
+      </th>
+      <th [class]="classTh" *ngFor="let head of headings">
+        {{ head.label }}
+      </th>
+    </tr>
+  </thead>
+  <tbody [class]="classBody">
+    <ng-container *ngFor="let dat of all;let di=index">
+      <tr class="{{classBodyRow}} {{dat.tableSelected===true?settings.selectedRowClass:''}} " (click)="rowClick(dat,di)">
+        <ng-container *ngIf="settings.check || settings.radio">
+          <td *ngIf="settings.check" class="text-center" >
+            <span (click)="checkClick(dat,di)">
+              <i class="fa fa-check-square-o" aria-hidden="true"  *ngIf="dat.tableSelected"></i>
+              <i class="fa fa-square-o" aria-hidden="true"  *ngIf="!dat.tableSelected"></i>
+            </span>
+          </td>
+          <td  *ngIf="settings.radio">
+            <i class="fa fa-circle-o" aria-hidden="true" (click)="radioClick(dat,di)" *ngIf="dat.tableSelected"></i>
+            <i class="fa fa-dot-circle-o" aria-hidden="true" (click)="radioClick(dat,di)" *ngIf="!dat.tableSelected"></i>
+          </td>
+        </ng-container>
+        <td [class]="classBodyTd" *ngFor="let head of headings;let li=index">
+          {{ dat[headings[li].field] }}
+        </td>
+      </tr>
+    </ng-container>
+  </tbody>
+  <tfoot [class]="classFooter">
+    <tr [class]="classFooterRow">
+      <td [class]="classFooterTd">
+
+      </td>
+    </tr>
+  </tfoot>
+</table>

@@ -1,0 +1,37 @@
+<h1 style="text-align: center">Prueba tabla</h1>
+<br>
+
+<div class="container card">
+  <h2>Configuracion de la tabla</h2>
+  <p>todo...</p>
+</div>
+
+<br>
+<div class="container">
+  <app-table [headings]="heads" [data]="rep" [settings]="setting" [selected]="sel" (cambios)="cambiosEnTabla($event)">
+  </app-table>
+</div>
+<div class="container-fluid">
+  <div class="row">
+    <div class="col-4">
+      <h3>Cambios</h3>
+      <p *ngFor="let dato of tableData;">
+        {{dato | json}}
+      </p>
+    </div>
+
+    <div class="col-4">
+      <h3>Seleccionados</h3>
+      <p *ngFor="let dato of sel;">
+        {{dato | json}}
+      </p>
+    </div>
+
+    <div class="col-4">
+      <h3>Data original</h3>
+      <p *ngFor="let dato of rep;">
+        {{dato | json}}
+      </p>
+    </div>
+  </div>
+</div>
