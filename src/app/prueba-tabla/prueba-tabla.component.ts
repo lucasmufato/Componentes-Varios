@@ -22,8 +22,11 @@ export class PruebaTablaComponent implements OnInit {
 
   ngOnInit() {
     this.rep = MockServiceService.getRepresentantes();
-    this.sel = [Object.assign({}, this.rep[0] )];
-    // this.sel = [new RepresentanteSolicitud(1, '789', '27 2342342 2', 'matias', 'dueño', 'cargo', null)];
+    // this.sel = [Object.assign({}, this.rep[0] )];
+    this.sel = [
+      // new RepresentanteSolicitud(1, '123', '27 2342342 2', 'matias', 'dueño', 'cargo', null),
+      new RepresentanteSolicitud(1, '789', '27 2342342 2', 'matias', 'dueño', 'cargo', null)
+    ];
     this.heads = [
       {label: 'Id', field: 'clienteIdSfb'},
       {label: 'CUIT/CUIL', field: 'cuil'},
@@ -35,10 +38,13 @@ export class PruebaTablaComponent implements OnInit {
     this.setting = {
       // radio:true,
       check: true,
-      selectLabel: 'Seleccionado',
-      rowSelect: true
+      // rowSelect: false,
+      // selectLabel:'peter warrior',
+      css:{
+        // selectedRowClass:'mufato-table-model'
+      },
+      compareFunction : (d1, d2) => d1.clienteIdSfb === d2.clienteIdSfb
     };
-    const compare = (d1, d2) => d1.clienteIdSfb === d2.clienteIdSfb;
 
   }
 
@@ -46,6 +52,9 @@ export class PruebaTablaComponent implements OnInit {
     this.tableData = algo;
   }
 
+  cambioSeleccionados(seleccionados){
+    this.sel = seleccionados;
+  }
 
 
 }

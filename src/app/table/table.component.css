@@ -1,3 +1,7 @@
 .defaultSelected{
   background-color: skyblue;
 }
+
+.mano{
+  cursor: pointer;
+}

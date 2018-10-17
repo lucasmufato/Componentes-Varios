@@ -8,7 +8,8 @@
 
 <br>
 <div class="container">
-  <app-table [headings]="heads" [data]="rep" [settings]="setting" [selected]="sel" (cambios)="cambiosEnTabla($event)">
+  <app-table [headings]="heads" [data]="rep" [settings]="setting" [selected]="sel"
+             (cambios)="cambiosEnTabla($event)" (seleccionados)="cambioSeleccionados($event)" >
   </app-table>
 </div>
 <div class="container-fluid">

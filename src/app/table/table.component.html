@@ -1,39 +1,42 @@
 
-<table [class]="classTable">
-  <thead [class]="classHeader">
-    <tr [class]="classHeaderRow">
+<table [class]="css.classTable">
+  <thead [class]="css.classHeader">
+    <tr [class]="css.classHeaderRow">
       <th *ngIf="settings.check || settings.radio">
         {{settings.selectLabel}}
       </th>
-      <th [class]="classTh" *ngFor="let head of headings">
+      <th [class]="css.classTh" *ngFor="let head of headings">
         {{ head.label }}
       </th>
     </tr>
   </thead>
-  <tbody [class]="classBody">
+  <tbody [class]="css.classBody">
     <ng-container *ngFor="let dat of all;let di=index">
-      <tr class="{{classBodyRow}} {{dat.tableSelected===true?settings.selectedRowClass:''}} " (click)="rowClick(dat,di)">
+      <tr class="{{css.classBodyRow}} {{dat.tableSelected===true?css.selectedRowClass:''}} {{settings.rowSelect?'mano':''}}"
+          (click)="rowClick(dat,di,$event)">
         <ng-container *ngIf="settings.check || settings.radio">
           <td *ngIf="settings.check" class="text-center" >
-            <span (click)="checkClick(dat,di)">
+            <span (click)="checkClick(dat,di,$event)" class="mano">
               <i class="fa fa-check-square-o" aria-hidden="true"  *ngIf="dat.tableSelected"></i>
               <i class="fa fa-square-o" aria-hidden="true"  *ngIf="!dat.tableSelected"></i>
             </span>
           </td>
-          <td  *ngIf="settings.radio">
-            <i class="fa fa-circle-o" aria-hidden="true" (click)="radioClick(dat,di)" *ngIf="dat.tableSelected"></i>
-            <i class="fa fa-dot-circle-o" aria-hidden="true" (click)="radioClick(dat,di)" *ngIf="!dat.tableSelected"></i>
+          <td *ngIf="settings.radio" class="text-center">
+            <span (click)="radioClick(dat,di,$event)" class="mano">
+              <i class="fa fa-dot-circle-o" aria-hidden="true" *ngIf="dat.tableSelected"></i>
+              <i class="fa fa-circle-o" aria-hidden="true" *ngIf="!dat.tableSelected"></i>
+            </span>
           </td>
         </ng-container>
-        <td [class]="classBodyTd" *ngFor="let head of headings;let li=index">
+        <td [class]="css.classBodyTd" *ngFor="let head of headings;let li=index">
           {{ dat[headings[li].field] }}
         </td>
       </tr>
     </ng-container>
   </tbody>
-  <tfoot [class]="classFooter">
-    <tr [class]="classFooterRow">
-      <td [class]="classFooterTd">
+  <tfoot [class]="css.classFooter">
+    <tr [class]="css.classFooterRow">
+      <td [class]="css.classFooterTd">
 
       </td>
     </tr>
