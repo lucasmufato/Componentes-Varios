@@ -7,5 +7,6 @@ export interface TableSettings {
   selectedRowClass?:string; // clase que se les pone a las filas seleccionadas
   compareFunction?: (d1, d2) => boolean; // funcion que compara entre los objetos recibidos
   css?: TableCssSettings; // interface con todos los css necesarios
+  sortable?: boolean; // si se puede ordenar por todas las columnas
 }
 

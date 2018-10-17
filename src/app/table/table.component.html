@@ -6,7 +6,15 @@
         {{settings.selectLabel}}
       </th>
       <th [class]="css.classTh" *ngFor="let head of headings">
-        {{ head.label }}
+        <span [class.mano]="settings.sortable || head.sortable" (click)="sortBy(head)">
+          {{ head.label }}
+          <span *ngIf="settings.sortable || head.sortable">
+            <i class="fa fa-sort" *ngIf="head.ordenado==undefined"></i>
+            <i class="fa fa-sort-up" *ngIf="head.ordenado=='asc'"></i>
+            <i class="fa fa-sort-down" *ngIf="head.ordenado=='des'"></i>
+          </span>
+        </span>
+
       </th>
     </tr>
   </thead>

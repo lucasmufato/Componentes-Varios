@@ -50,7 +50,8 @@ export class TableComponent implements OnInit {
       css: {
         classTable: 'table table-sm-responsive',
         selectedRowClass: 'defaultSelected'
-      }
+      },
+      sortable: false
     };
   }
 
@@ -60,26 +61,37 @@ export class TableComponent implements OnInit {
     console.log('entre al ng on Init');
     // piso valores por defecto con los recibidos
     this.settings = Object.assign(this.defaultSettings(), this.settings);
-    this.settings.css = Object.assign(this.defaultSettings().css,this.settings.css);
+    this.settings.css = Object.assign(this.defaultSettings().css, this.settings.css);
 
     // paso a variables internas para reducir codigo
     this.compareFunction = this.settings.compareFunction;
     this.css = this.settings.css;
 
+    // copio los 'datos' sin seleccionar
     this.all = this.data.map(dato => Object.assign({tableSelected: false}, dato) );
+    // por cada seleccionado lo agrego a los datos o le cambio el estado a seleccionado
     this.selected.forEach(sel => {
       let esta = false;
       this.all.forEach( dato => {
+        // si esta le cambio el estado
         if (this.compareFunction(sel, dato)) {
           dato.tableSelected = true;
           esta = true;
           return;
         }
       });
+      // si no esta lo agrego
       if (!esta) {
         this.all.push(Object.assign({tableSelected: true}, sel));
       }
     });
+
+    // si se paso que este ordenado por alguna columna, la obtengo y la ordeno por esa
+    let header = this.headings.filter( h => h.ordenado === 'asc' || h.ordenado === 'des').pop();
+    if( !isNullOrUndefined(header)){
+      this.sortBy(header);
+    }
+
   }
 
   rowClick(objeto: TableElement, indice: number, evento: Event) {
@@ -117,14 +129,42 @@ export class TableComponent implements OnInit {
     if (objeto.tableSelected === true) {
       return;
     } else {
-      let selected = this.all.filter( (d: TableElement) => d.tableSelected===true );
-      selected.forEach( (d: TableElement) => d.tableSelected=false);
-      objeto.tableSelected=true;
+      const selected = this.all.filter( (d: TableElement) => d.tableSelected === true );
+      selected.forEach( (d: TableElement) => d.tableSelected = false);
+      objeto.tableSelected = true;
     }
     this.cambios.emit(this.all);
     this.seleccionados.emit(this.all.filter(a => a.tableSelected === true));
   }
 
+  /**
+   * Ordena la lista por el field del header
+   * @param header tableHeader
+   */
+  sortBy(header: TableHeader) {
+    if( !(this.settings.sortable || header.sortable) ){
+      return;
+    }
+    // voy pasando por los estados def -> asc -> des -> asc
+    this.headings.filter( h => h !== header).forEach( h => h.ordenado = undefined);
+    // si el ESTADO ACTUAL
+    const f = header.field;
+    switch (header.ordenado) {
+      case 'asc':
+        this.all.sort((a, b) => (a[f] < b[f]) ? 1 : (a[f] > b[f]) ? -1 : 0);
+        header.ordenado = 'des';
+        break;
+      case 'des':
+        this.all.sort((a, b) => (a[f] > b[f]) ? 1 : (a[f] < b[f]) ? -1 : 0);
+        header.ordenado = 'asc';
+        break;
+      default:
+        this.all.sort((a, b) => (a[f] > b[f]) ? 1 : (a[f] < b[f]) ? -1 : 0);
+        header.ordenado = 'asc';
+        break;
+    }
+
+  }
 
 
 }

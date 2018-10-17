@@ -3,4 +3,5 @@ export interface TableHeader {
   field: string;
   sortable?: boolean;
   filterable?: boolean;
+  ordenado?: string;
 }

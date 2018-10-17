@@ -24,11 +24,11 @@ export class PruebaTablaComponent implements OnInit {
     this.rep = MockServiceService.getRepresentantes();
     // this.sel = [Object.assign({}, this.rep[0] )];
     this.sel = [
-      // new RepresentanteSolicitud(1, '123', '27 2342342 2', 'matias', 'dueño', 'cargo', null),
+      new RepresentanteSolicitud(1, '123', '27 2342342 2', 'matias', 'dueño', 'cargo', null),
       new RepresentanteSolicitud(1, '789', '27 2342342 2', 'matias', 'dueño', 'cargo', null)
     ];
     this.heads = [
-      {label: 'Id', field: 'clienteIdSfb'},
+      {label: 'Id', field: 'clienteIdSfb', ordenado: 'des'},
       {label: 'CUIT/CUIL', field: 'cuil'},
       {label: 'Denominacion', field: 'denominacion'},
       {label: 'Relacion', field: 'relacion'},
@@ -43,6 +43,7 @@ export class PruebaTablaComponent implements OnInit {
       css:{
         // selectedRowClass:'mufato-table-model'
       },
+      sortable: true,
       compareFunction : (d1, d2) => d1.clienteIdSfb === d2.clienteIdSfb
     };
 
