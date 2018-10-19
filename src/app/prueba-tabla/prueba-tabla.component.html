@@ -12,7 +12,7 @@
              (cambios)="cambiosEnTabla($event)" (seleccionados)="cambioSeleccionados($event)" >
   </app-table>
 </div>
-<div class="container-fluid">
+<div class="container-fluid" *ngIf="false">
   <div class="row">
     <div class="col-4">
       <h3>Cambios</h3>
@@ -26,6 +26,11 @@
       <p *ngFor="let dato of sel;">
         {{dato | json}}
       </p>
+      <h3>Trabajos</h3>
+      <p *ngFor="let t of trabajo;">
+      {{t | json}}
+    </p>
+
     </div>
 
     <div class="col-4">
@@ -37,6 +42,6 @@
   </div>
 </div>
 <div class="container">
-  <app-table [headings]="trabajoHeads" [data]="trabajo" [settings]="setting" [selected]="trabajo" >
+  <app-table [headings]="trabajoHeads" [data]="trabajo" [settings]="setting" [readonly]="true" >
   </app-table>
 </div>

@@ -27,25 +27,11 @@ export class PruebaTablaComponent implements OnInit {
 
   ngOnInit() {
     this.rep = MockServiceService.getPersonas();
-    // this.sel = [Object.assign({}, this.rep[0] )];
-
-    const IBM: Trabajo = new Trabajo('Service Manager', 'IBM', true, new Date());
-    this.sel = [
-      new Personas(5, '20 35942784 1', 'German', 'Mufato', new Date('1992-04-11'), IBM)
-    ];
-    this.heads = [
-      {label: 'Id', field: 'id', ordenado: 'des'},
-      {label: 'CUIT/CUIL', field: 'cuil'},
-      {label: 'Nombre', field: 'nombre'},
-      {label: 'Apellido', field: 'apellido'},
-      // {label: 'Fecha Nac.', field: 'fechaNacimiento'},
-      {label: 'Fecha Nac.', field: 'fechaNacimiento', pipe: DatePipe, pipeArgs: ['dd/MM/yyyy']},
-      {label: 'Trabajo', field: 'trabajo', pipe: TrabajoPipe, pipeArgs: 'medio' },
-      // {label: 'Trabajo', field: 'trabajo'},
-    ];
+    this.sel = [Object.assign({}, this.rep[0] )];
+    this.heads = MockServiceService.getHeadersPersonas();
     this.setting = {
-      // radio:true,
-      check: true,
+      radio:true,
+      // check: true,
       // rowSelect: false,
       // selectLabel:'pablo serra',
       // css: {
@@ -73,6 +59,7 @@ export class PruebaTablaComponent implements OnInit {
 
   cambioSeleccionados(seleccionados) {
     this.sel = seleccionados;
+    this.trabajo = [this.sel[0].trabajo];
   }
 
 

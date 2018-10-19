@@ -20,17 +20,17 @@
   </thead>
   <tbody [class]="css.classBody">
     <ng-container *ngFor="let dat of all;let di=index">
-      <tr class="{{css.classBodyRow}} {{dat.tableSelected===true?css.selectedRowClass:''}} {{settings.rowSelect?'mano':''}}"
-          (click)="rowClick(dat,di,$event)">
+      <tr class="{{css.classBodyRow}} {{dat.tableSelected===true?css.selectedRowClass:''}} {{readonly?css.readonlyRow:''}}"
+          [class.mano]="settings.rowSelect&&!readonly" (click)="rowClick(dat,di,$event)">
         <ng-container *ngIf="settings.check || settings.radio">
           <td *ngIf="settings.check" class="text-center" >
-            <span (click)="checkClick(dat,di,$event)" class="mano">
+            <span (click)="checkClick(dat,di,$event)" [class.mano]="!readonly" [class.block]="readonly">
               <i class="fa fa-check-square-o" aria-hidden="true"  *ngIf="dat.tableSelected"></i>
               <i class="fa fa-square-o" aria-hidden="true"  *ngIf="!dat.tableSelected"></i>
             </span>
           </td>
           <td *ngIf="settings.radio" class="text-center">
-            <span (click)="radioClick(dat,di,$event)" class="mano">
+            <span (click)="radioClick(dat,di,$event)" [class.mano]="!readonly" [class.block]="readonly">
               <i class="fa fa-dot-circle-o" aria-hidden="true" *ngIf="dat.tableSelected"></i>
               <i class="fa fa-circle-o" aria-hidden="true" *ngIf="!dat.tableSelected"></i>
             </span>
@@ -44,9 +44,8 @@
   </tbody>
   <tfoot [class]="css.classFooter">
     <tr [class]="css.classFooterRow">
-      <td [class]="css.classFooterTd">
-
-      </td>
+      <!--<td [class]="css.classFooterTd">-->
+      <!--</td>-->
     </tr>
   </tfoot>
 </table>

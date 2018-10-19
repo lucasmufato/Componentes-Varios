@@ -11,4 +11,5 @@ export interface TableCssSettings {
  classFooterRow?: string;
  classFooterTd?: string;
  selectedRowClass?: string;
+ readonlyRow?: string;
 }

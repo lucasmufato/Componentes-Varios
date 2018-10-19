@@ -1,16 +1,17 @@
-import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
+import {Component, EventEmitter, Input, OnChanges, OnInit, Output, SimpleChanges} from '@angular/core';
 import {TableHeader} from './table-header';
 import {TableSettings} from './table-settings';
 import {isNullOrUndefined} from 'util';
 import {TableElement} from './table-element';
 import {TableCssSettings} from './table-css-settings';
+import {logger} from 'codelyzer/util/logger';
 
 @Component({
   selector: 'app-table',
   templateUrl: './table.component.html',
   styleUrls: ['./table.component.css']
 })
-export class TableComponent implements OnInit {
+export class TableComponent implements OnInit, OnChanges {
 
   // Inputs y Outputs
   @Input() readonly = false;
@@ -47,7 +48,8 @@ export class TableComponent implements OnInit {
       compareFunction: this.defaultCompare,
       css: {
         classTable: 'table table-sm-responsive',
-        selectedRowClass: 'defaultSelected'
+        selectedRowClass: 'defaultSelected',
+        readonlyRow: 'defaultReadonly'
       },
       sortable: false
     };
@@ -55,16 +57,26 @@ export class TableComponent implements OnInit {
 
   constructor() { }
 
+  ngOnChanges(cambios: SimpleChanges) {
+    this.inicializoSettings();
+    this.armoTabla();
+  }
+
   ngOnInit() {
-    console.log('entre al ng on Init');
+    // this.inicializoSettings();
+    // this.armoTabla();
+  }
+
+  inicializoSettings() {
     // piso valores por defecto con los recibidos
     this.settings = Object.assign(this.defaultSettings(), this.settings);
     this.settings.css = Object.assign(this.defaultSettings().css, this.settings.css);
-
     // paso a variables internas para reducir codigo
     this.compareFunction = this.settings.compareFunction;
     this.css = this.settings.css;
+  }
 
+  armoTabla() {
     // copio los 'datos' sin seleccionar
     this.all = this.data.map(dato => Object.assign({tableSelected: false}, dato) );
     // por cada seleccionado lo agrego a los datos o le cambio el estado a seleccionado
@@ -85,11 +97,10 @@ export class TableComponent implements OnInit {
     });
 
     // si se paso que este ordenado por alguna columna, la obtengo y la ordeno por esa
-    let header = this.headings.filter( h => h.ordenado === 'asc' || h.ordenado === 'des').pop();
-    if( !isNullOrUndefined(header)){
-      this.sortBy(header);
+    const header = this.headings.filter( h => h.ordenado === 'asc' || h.ordenado === 'des').pop();
+    if ( !isNullOrUndefined(header)) {
+      this.sortBy(header, true);
     }
-
   }
 
   rowClick(objeto: TableElement, indice: number, evento: Event) {
@@ -109,12 +120,9 @@ export class TableComponent implements OnInit {
     if (this.readonly) {
       return;
     }
-    if (objeto.tableSelected === true) {
-      objeto.tableSelected = false;
-    } else {
-      objeto.tableSelected = true;
-    }
-    this.cambios.emit(this.all);
+    //alterno el valor
+    objeto.tableSelected = objeto.tableSelected !== true;
+    this.cambios.emit(this.all.map(d => d));
     this.seleccionados.emit(this.all.filter(a => a.tableSelected === true));
   }
 
@@ -131,18 +139,22 @@ export class TableComponent implements OnInit {
       selected.forEach( (d: TableElement) => d.tableSelected = false);
       objeto.tableSelected = true;
     }
-    this.cambios.emit(this.all);
+    this.cambios.emit(this.all.map(d => d));
     this.seleccionados.emit(this.all.filter(a => a.tableSelected === true));
   }
 
   /**
    * Ordena la lista por el field del header
    * @param header tableHeader
+   * @param arrancaOrdenado si cuando se crea la tabla se indica que esta ordenado por esta columna
    */
-  sortBy(header: TableHeader) {
-    if( !(this.settings.sortable || header.sortable) ){
-      return;
+  sortBy(header: TableHeader, arrancaOrdenado: boolean) {
+    if (!arrancaOrdenado) {
+      if (!(this.settings.sortable || header.sortable)) {
+        return;
+      }
     }
+
     // voy pasando por los estados def -> asc -> des -> asc
     this.headings.filter( h => h !== header).forEach( h => h.ordenado = undefined);
     // si el ESTADO ACTUAL
@@ -150,15 +162,15 @@ export class TableComponent implements OnInit {
     switch (header.ordenado) {
       case 'asc':
         this.all.sort((a, b) => (a[f] < b[f]) ? 1 : (a[f] > b[f]) ? -1 : 0);
-        header.ordenado = 'des';
+        header.ordenado = arrancaOrdenado ? header.ordenado : 'des';
         break;
       case 'des':
         this.all.sort((a, b) => (a[f] > b[f]) ? 1 : (a[f] < b[f]) ? -1 : 0);
-        header.ordenado = 'asc';
+        header.ordenado = arrancaOrdenado ? header.ordenado : 'asc';
         break;
       default:
         this.all.sort((a, b) => (a[f] > b[f]) ? 1 : (a[f] < b[f]) ? -1 : 0);
-        header.ordenado = 'asc';
+        header.ordenado = arrancaOrdenado ? header.ordenado : 'asc';
         break;
     }
 

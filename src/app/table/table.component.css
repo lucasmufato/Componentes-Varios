@@ -5,3 +5,11 @@
 .mano{
   cursor: pointer;
 }
+
+.block{
+  cursor: not-allowed;
+}
+
+.defaultReadonly{
+  background-color: lightgrey;
+}
