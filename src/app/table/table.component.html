@@ -37,7 +37,7 @@
           </td>
         </ng-container>
         <td [class]="css.classBodyTd" *ngFor="let head of headings;let li=index">
-          {{ dat[headings[li].field] }}
+          {{ dat[headings[li].field] | dynamicPipe:head.pipe:head.pipeArgs }}
         </td>
       </tr>
     </ng-container>

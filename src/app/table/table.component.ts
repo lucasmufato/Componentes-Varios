@@ -1,11 +1,9 @@
 import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
-import {FormGroup} from '@angular/forms';
 import {TableHeader} from './table-header';
 import {TableSettings} from './table-settings';
 import {isNullOrUndefined} from 'util';
 import {TableElement} from './table-element';
 import {TableCssSettings} from './table-css-settings';
-import {forEach} from '@angular/router/src/utils/collection';
 
 @Component({
   selector: 'app-table',

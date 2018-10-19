@@ -6,19 +6,28 @@ import { TableComponent } from './table/table.component';
 import { AppRoutingModule } from './/app-routing.module';
 import { PruebaTablaComponent } from './prueba-tabla/prueba-tabla.component';
 import {NgbModule} from '@ng-bootstrap/ng-bootstrap';
+import { DynamicPipePipe } from './shared/dynamic-pipe.pipe';
+import {DatePipe, PercentPipe} from "@angular/common";
+import { TrabajoPipe } from './pipes/trabajo-pipe.pipe';
 
 @NgModule({
   declarations: [
     AppComponent,
     TableComponent,
-    PruebaTablaComponent
+    PruebaTablaComponent,
+    DynamicPipePipe,
+    TrabajoPipe
   ],
   imports: [
     BrowserModule,
     AppRoutingModule,
     NgbModule
   ],
-  providers: [],
+  providers: [
+    DatePipe,
+    PercentPipe,
+    TrabajoPipe
+  ],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

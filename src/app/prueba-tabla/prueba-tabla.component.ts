@@ -1,8 +1,11 @@
 import { Component, OnInit } from '@angular/core';
-import {RepresentanteSolicitud} from '../models/representante-solicitud.model';
+import {Personas} from '../models/Persona';
 import {MockServiceService} from '../services/mock-service.service';
 import {TableHeader} from '../table/table-header';
 import {TableSettings} from '../table/table-settings';
+import {DatePipe} from '@angular/common';
+import {TrabajoPipe} from "../pipes/trabajo-pipe.pipe";
+import {Trabajo} from "../models/trabajo";
 
 @Component({
   selector: 'app-prueba-tabla',
@@ -13,39 +16,54 @@ export class PruebaTablaComponent implements OnInit {
 
   constructor() { }
 
-  rep: RepresentanteSolicitud[];
-  sel: RepresentanteSolicitud[];
+  rep: Personas[];
+  sel: Personas[];
   heads: TableHeader[];
+  trabajoHeads: TableHeader[];
   setting: TableSettings;
+  trabajo: Trabajo[];
 
   tableData = [];
 
   ngOnInit() {
-    this.rep = MockServiceService.getRepresentantes();
+    this.rep = MockServiceService.getPersonas();
     // this.sel = [Object.assign({}, this.rep[0] )];
+
+    const IBM: Trabajo = new Trabajo('Service Manager', 'IBM', true, new Date());
     this.sel = [
-      new RepresentanteSolicitud(1, '123', '27 2342342 2', 'matias', 'dueño', 'cargo', null),
-      new RepresentanteSolicitud(1, '789', '27 2342342 2', 'matias', 'dueño', 'cargo', null)
+      new Personas(5, '20 35942784 1', 'German', 'Mufato', new Date('1992-04-11'), IBM)
     ];
     this.heads = [
-      {label: 'Id', field: 'clienteIdSfb', ordenado: 'des'},
+      {label: 'Id', field: 'id', ordenado: 'des'},
       {label: 'CUIT/CUIL', field: 'cuil'},
-      {label: 'Denominacion', field: 'denominacion'},
-      {label: 'Relacion', field: 'relacion'},
-      {label: 'Cargo', field: 'cargo'},
-      {label: 'Facultad Corhoma', field: 'facultadCorhoma'},
+      {label: 'Nombre', field: 'nombre'},
+      {label: 'Apellido', field: 'apellido'},
+      // {label: 'Fecha Nac.', field: 'fechaNacimiento'},
+      {label: 'Fecha Nac.', field: 'fechaNacimiento', pipe: DatePipe, pipeArgs: ['dd/MM/yyyy']},
+      {label: 'Trabajo', field: 'trabajo', pipe: TrabajoPipe, pipeArgs: 'medio' },
+      // {label: 'Trabajo', field: 'trabajo'},
     ];
     this.setting = {
       // radio:true,
       check: true,
       // rowSelect: false,
-      // selectLabel:'peter warrior',
-      css:{
-        // selectedRowClass:'mufato-table-model'
-      },
-      sortable: true,
-      compareFunction : (d1, d2) => d1.clienteIdSfb === d2.clienteIdSfb
+      // selectLabel:'pablo serra',
+      // css: {
+      //   selectedRowClass:'mufato-table-model'
+      // },
+      // sortable: true,
+      // compareFunction : (d1, d2) => d1.cuil === d2.cuil
     };
+
+
+    this.trabajo = [this.sel[0].trabajo];
+    this.trabajoHeads = [
+      {label: 'Empresa', field: 'empresa'},
+      {label: 'Puesto', field: 'puesto'},
+      {label: 'En Blanco', field: 'enBlanco'},
+      {label: 'Fecha Inicio', field: 'fechaInicio',pipe: DatePipe, pipeArgs: ['dd/MM/yyyy']}
+    ];
+
 
   }
 
@@ -53,7 +71,7 @@ export class PruebaTablaComponent implements OnInit {
     this.tableData = algo;
   }
 
-  cambioSeleccionados(seleccionados){
+  cambioSeleccionados(seleccionados) {
     this.sel = seleccionados;
   }
 
